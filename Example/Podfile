@@ -1,4 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
 use_frameworks!
 
 target 'youtube-ios-player-helper_Example', :exclusive => true do
@@ -7,6 +8,4 @@ end
 
 target 'youtube-ios-player-helper_Tests', :exclusive => true do
   pod 'youtube-ios-player-helper', :path => '../'
-
-  
 end
