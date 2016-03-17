@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'youtube-ios-player-helper_Example', :exclusive => true do
+  pod 'youtube-ios-player-helper', :path => '../'
+end
+
+target 'youtube-ios-player-helper_Tests', :exclusive => true do
+  pod 'youtube-ios-player-helper', :path => '../'
+
+  
+end
