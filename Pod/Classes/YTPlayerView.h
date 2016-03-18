@@ -56,9 +56,10 @@ extern NSString * const YTPlayerErrorDomain;
 typedef NS_ENUM(NSInteger, YTPlayerError) {
     YTPlayerErrorInvalidParam,
     YTPlayerErrorHTML5Error,
-    YTPlayerErrorVideoNotFound, /// Functionally equivalent error codes 100 and 105 have been collapsed into `YTPlayerErrorVideoNotFound`.
-    YTPlayerErrorNotEmbeddable, /// Functionally equivalent error codes 101 and 150 have been collapsed into `YTPlayerErrorNotEmbeddable`.
-    YTPlayerErrorUnknown
+    YTPlayerErrorVideoNotFound,         /// Functionally equivalent error codes 100 and 105 have been collapsed into `YTPlayerErrorVideoNotFound`.
+    YTPlayerErrorNotEmbeddable,         /// Functionally equivalent error codes 101 and 150 have been collapsed into `YTPlayerErrorNotEmbeddable`.
+    YTPlayerErrorUnknown,
+    YTPlayerErrorFailedToLoadPlayer,    /// Failed to load YouTube iframe player through API (might have no internet connection for now, etc...)
 };
 
 
@@ -104,7 +105,7 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
  * @param playerView The YTPlayerView instance where the error has occurred.
  * @param error An NSError objects that `domain` is `YTPlayerErrorDomain` and `code` represends `YTPlayerError`,
  */
-- (void)playerView:(YTPlayerView *)playerView receivedError:(NSError *)error;
+- (void)playerView:(YTPlayerView *)playerView didReceiveError:(NSError *)error;
 
 /**
  * Callback invoked frequently when playBack is playing.
@@ -139,6 +140,19 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 @property (nonatomic, weak, nullable) id<YTPlayerViewDelegate> delegate;
 
 /**
+ * A Boolean value indicating whether you want to allow to play videos in AirPlay.
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL allowsAirPlayForMediaPlayback;
+
+/**
+ * A Boolean value indicating whether you want to allow to play videos in picture-in-picture mode.
+ * Only works when picture-in-picture mode is supported by the running OS and the device.
+ * Default value is NO.
+ */
+@property (nonatomic) BOOL allowsPictureInPictureMediaPlayback;
+
+/**
  A view that is displayed while the YouTube player is not loaded or not being loaded yet.
  
  YTPlayerView can't show users anything unless the YouTube player is loaded to the web view through YouTube iframe API.
@@ -165,7 +179,7 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 
 /**
  * This method loads the player with the given video ID.
- * This is a convenience method for calling YTPlayerView::loadPlayerWithVideoId:withPlayerVars:
+ * This is a convenience method for calling `-loadPlayerWithVideoId:withPlayerVars:`
  * without player variables.
  *
  * This method reloads the entire contents of the UIWebView and regenerates its HTML contents.
@@ -179,7 +193,7 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 
 /**
  * This method loads the player with the given playlist ID.
- * This is a convenience method for calling YTPlayerView::loadWithPlaylistId:withPlayerVars:
+ * This is a convenience method for calling `-loadPlayerWithPlaylistId:withPlayerVars:`
  * without player variables.
  *
  * This method reloads the entire contents of the UIWebView and regenerates its HTML contents.
@@ -241,7 +255,7 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 
 /**
  * This method loads an iframe player with the given player parameters. Usually you may want to use
- * -loadWithVideoId:playerVars: or -loadWithPlaylistId:playerVars: instead of this method does not handle
+ * `-loadPlayerWithVideoId:playerVars:` or `-loadPlayerWithPlaylistId:playerVars:` instead of this method does not handle
  * video_id or playlist_id at all. The full list of parameters is defined at:
  *   https://developers.google.com/youtube/player_parameters?playerVersion=HTML5.
  *
