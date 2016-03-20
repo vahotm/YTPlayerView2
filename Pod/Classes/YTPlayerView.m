@@ -486,6 +486,42 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     }];
 }
 
+#pragma mark - Setting the playback rate
+
+- (void)playbackRate:(nullable YTPlayerViewJSResultFloat)callback {
+    [self evaluateJavaScript:@"player.getPlaybackRate();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback([result floatValue], error);
+        }
+    }];
+}
+
+- (void)setPlaybackRate:(float)suggestedRate callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSString *command = [NSString stringWithFormat:@"player.setPlaybackRate(%f);", suggestedRate];
+    [self evaluateJavaScript:command completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)availablePlaybackRates:(nullable YTPlayerViewJSResultNumberArray)callback {
+    [self evaluateJavaScript:@"player.getAvailablePlaybackRates();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            NSData *jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *jsonError;
+            NSArray *playbackRates = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                     options:0
+                                                                       error:&jsonError];
+            if (jsonError) {
+                callback(nil, [NSError errorWithDomain:YTPlayerErrorDomain code:YTPlayerErrorJSError userInfo:@{NSUnderlyingErrorKey: jsonError}]);
+            } else {
+                callback(playbackRates, error);
+            }
+        }
+    }];
+}
+
 #pragma mark - Exposed for Testing
 
 - (void)removeWebView {

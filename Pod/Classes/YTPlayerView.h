@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 
 typedef void (^YTPlayerViewJSResultVoid)(NSError * _Nullable error);
 typedef void (^YTPlayerViewJSResultFloat)(float value, NSError * _Nullable error);
-typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable values, NSError * _Nullable error);
 
 #pragma mark - YTPlayerViewDelegate
 
@@ -482,7 +482,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  *
  * @return A float value that represends the current playback rate.
  */
-- (float)playbackRate;
+- (void)playbackRate:(nullable YTPlayerViewJSResultFloat)callback;
 
 /**
  * Sets the playback rate. The default value is 1.0, which represents a video
@@ -495,7 +495,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  *
  * @param suggestedRate A playback rate to suggest for the player.
  */
-- (void)setPlaybackRate:(float)suggestedRate;
+- (void)setPlaybackRate:(float)suggestedRate callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Gets a list of the valid playback rates, useful in conjunction with
@@ -505,7 +505,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  *
  * @return An NSArray containing available playback rates. nil if there is an error.
  */
-- (nullable NSArray *)availablePlaybackRates;
+- (void)availablePlaybackRates:(nullable YTPlayerViewJSResultNumberArray)callback;
 
 #pragma mark - Setting playback behavior for playlists
 
