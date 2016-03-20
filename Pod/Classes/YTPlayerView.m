@@ -560,6 +560,41 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     }];
 }
 
+#pragma mark - Playback quality
+
+- (void)playbackQuality:(nullable YTPlayerViewJSResultInteger)callback {
+    [self evaluateJavaScript:@"player.getPlaybackQuality();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            YTPlaybackQuality quality = YTPlaybackQualityFromNSString(result);
+            callback(quality, error);
+        }
+    }];
+}
+
+- (void)setPlaybackQuality:(YTPlaybackQuality)suggestedQuality callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.setPlaybackQuality('%@');", qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)availableQualityLevels:(nullable YTPlayerViewJSResultNumberArray)callback {
+    [self evaluateJavaScript:@"player.getAvailableQualityLevels().toString();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            NSArray *rawQualityValues = [result componentsSeparatedByString:@","];
+            NSMutableArray *levels = [NSMutableArray arrayWithCapacity:rawQualityValues.count];
+            for (NSString *rawQualityValue in rawQualityValues) {
+                YTPlaybackQuality quality = YTPlaybackQualityFromNSString(rawQualityValue);
+                [levels addObject:@(quality)];
+            }
+            callback(levels, error);
+        }
+    }];
+}
+
 #pragma mark - Exposed for Testing
 
 - (void)removeWebView {

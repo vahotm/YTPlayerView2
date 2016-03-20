@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 };
 
 typedef void (^YTPlayerViewJSResultVoid)(NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultInteger)(NSInteger value, NSError * _Nullable error);
 typedef void (^YTPlayerViewJSResultFloat)(float value, NSError * _Nullable error);
 typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable values, NSError * _Nullable error);
 
@@ -576,7 +577,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return YTPlaybackQuality representing the current playback quality.
  */
-- (YTPlaybackQuality)playbackQuality;
+- (void)playbackQuality:(nullable YTPlayerViewJSResultInteger)callback;
 
 /**
  * Suggests playback quality for the video. It is recommended to leave this setting to
@@ -585,7 +586,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @param quality YTPlaybackQuality value to suggest for the player.
  */
-- (void)setPlaybackQuality:(YTPlaybackQuality)suggestedQuality;
+- (void)setPlaybackQuality:(YTPlaybackQuality)suggestedQuality callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Gets a list of the valid playback quality values, useful in conjunction with
@@ -595,7 +596,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return An NSArray containing available playback quality levels. Returns nil if there is an error.
  */
-- (nullable NSArray *)availableQualityLevels;
+- (void)availableQualityLevels:(nullable YTPlayerViewJSResultNumberArray)callback;
 
 #pragma mark - Retrieving video information
 
