@@ -60,11 +60,12 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
     YTPlayerErrorNotEmbeddable,         /// Functionally equivalent error codes 101 and 150 have been collapsed into `YTPlayerErrorNotEmbeddable`.
     YTPlayerErrorUnknown,
     YTPlayerErrorFailedToLoadPlayer,    /// Failed to load YouTube iframe player through API (might have no internet connection for now, etc...)
+    YTPlayerErrorJSError,
 };
 
-typedef void (^YTPlayerViewResultVoid)(NSError * _Nullable error);
-typedef void (^YTPlayerViewResultFloat)(float value, NSError * _Nullable error);
-typedef void (^YTPlayerViewResultNumberArray)(NSArray<NSNumber *> *values, NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultVoid)(NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultFloat)(float value, NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSError * _Nullable error);
 
 #pragma mark - YTPlayerViewDelegate
 
@@ -273,8 +274,6 @@ typedef void (^YTPlayerViewResultNumberArray)(NSArray<NSNumber *> *values, NSErr
 
 #pragma mark - Player controls
 
-// TODO: ALL METHODS THAT CALLS JS MUST HAVE ASYNC CALLBACK
-
 // These methods correspond to their JavaScript equivalents as documented here:
 //   https://developers.google.com/youtube/iframe_api_reference#Playback_controls
 
@@ -283,21 +282,21 @@ typedef void (^YTPlayerViewResultNumberArray)(NSArray<NSNumber *> *values, NSErr
  * the JavaScript API:
  *   https://developers.google.com/youtube/iframe_api_reference#playVideo
  */
-- (void)playVideo;
+- (void)playVideo:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Pauses playback on a playing video. Corresponds to this method from
  * the JavaScript API:
  *   https://developers.google.com/youtube/iframe_api_reference#pauseVideo
  */
-- (void)pauseVideo;
+- (void)pauseVideo:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Stops playback on a playing video. Corresponds to this method from
  * the JavaScript API:
  *   https://developers.google.com/youtube/iframe_api_reference#stopVideo
  */
-- (void)stopVideo;
+- (void)stopVideo:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Seek to a given time on a playing video. Corresponds to this method from
@@ -308,7 +307,7 @@ typedef void (^YTPlayerViewResultNumberArray)(NSArray<NSNumber *> *values, NSErr
  * @param allowSeekAhead Whether to make a new request to the server if the time is
  *                       outside what is currently buffered. Recommended to set to YES.
  */
-- (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead;
+- (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 #pragma mark - Queuing videos
 

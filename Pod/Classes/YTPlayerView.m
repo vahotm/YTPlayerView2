@@ -120,6 +120,16 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
     }
 }
 
+/**
+ * Private method to convert a Objective-C BOOL value to JS boolean value.
+ *
+ * @param boolValue Objective-C BOOL value.
+ * @return JavaScript Boolean value, i.e. "true" or "false".
+ */
+NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
+    return boolValue ? @"true" : @"false";
+}
+
 #pragma mark -
 
 
@@ -283,6 +293,48 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
     self.htmlLoadingNavigation = [self.webView loadHTMLString:embedHTML baseURL:self.originURL];
     
     return (self.htmlLoadingNavigation != nil);
+}
+
+#pragma mark - Player controls
+
+- (void)playVideo:(nullable YTPlayerViewJSResultVoid)callback {
+    [self evaluateJavaScript:@"player.playVideo();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)pauseVideo:(nullable YTPlayerViewJSResultVoid)callback {
+    __weak typeof(self) weakSelf = self;
+    [self evaluateJavaScript:@"player.pauseVideo();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (error == nil) {
+            // Update the internal state using the mocked callback URL since the player doesn't cause the callback automatically in this case.
+            [weakSelf handleYouTubeCallbackURL:[NSURL URLWithString:[NSString stringWithFormat:@"ytplayer://onStateChange?data=%@", YTPlayerStatePausedCode]]];
+        }
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)stopVideo:(nullable YTPlayerViewJSResultVoid)callback {
+    [self evaluateJavaScript:@"player.stopVideo();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)seekToSeconds:(float)seekToSeconds allowSeekAhead:(BOOL)allowSeekAhead callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *secondsValue = [NSNumber numberWithFloat:seekToSeconds];
+    NSString *allowSeekAheadValue = NSStringFromYTPlayerJSBoolean(allowSeekAhead);
+    NSString *command = [NSString stringWithFormat:@"player.seekTo(%@, %@);", secondsValue, allowSeekAheadValue];
+    [self evaluateJavaScript:command completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
 }
 
 #pragma mark - Exposed for Testing
@@ -579,6 +631,22 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
         [self hideInitialLoadingView];
         [self showBeforeLoadingView];
         [self delegateErrorWithCode:YTPlayerErrorFailedToLoadPlayer description:nil underlyingError:nil];
+    }
+}
+
+- (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(_Nullable id result, NSError * _Nullable error))completionHandler {
+    if (self.webView == nil) {
+        NSError *error = [NSError errorWithDomain:YTPlayerErrorDomain code:YTPlayerErrorJSError userInfo:@{NSLocalizedDescriptionKey: @"YTPlayerView didn't load the internal web view yet. Load before using any other public methods."}];
+        completionHandler(nil, error);
+    } else {
+        [self.webView evaluateJavaScript:javaScriptString completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+            if (error != nil) {
+                NSError *jsError = [NSError errorWithDomain:YTPlayerErrorDomain code:YTPlayerErrorJSError userInfo:@{NSUnderlyingErrorKey: error}];
+                completionHandler(result, jsError);
+            } else {
+                completionHandler(result, nil);
+            }
+        }];
     }
 }
 
