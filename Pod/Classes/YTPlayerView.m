@@ -459,6 +459,33 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     }];
 }
 
+#pragma mark - Playing a video in a playlist
+
+- (void)nextVideo:(nullable YTPlayerViewJSResultVoid)callback {
+    [self evaluateJavaScript:@"player.nextVideo();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)previouVideo:(nullable YTPlayerViewJSResultVoid)callback {
+    [self evaluateJavaScript:@"player.previousVideo();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)playVideoAt:(NSInteger)index callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSString *command = [NSString stringWithFormat:@"player.playVideoAt(%@);", [NSNumber numberWithInteger:index]];
+    [self evaluateJavaScript:command completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
 #pragma mark - Exposed for Testing
 
 - (void)removeWebView {

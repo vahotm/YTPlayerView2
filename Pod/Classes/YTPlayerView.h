@@ -453,14 +453,14 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  * the JavaScript API:
  *   https://developers.google.com/youtube/iframe_api_reference#nextVideo
  */
-- (void)nextVideo;
+- (void)nextVideo:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Loads and plays the previous video in the playlist. Corresponds to this method from
  * the JavaScript API:
  *   https://developers.google.com/youtube/iframe_api_reference#previousVideo
  */
-- (void)previouVideo;
+- (void)previouVideo:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Loads and plays the video at the given 0-indexed position in the playlist.
@@ -469,7 +469,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  *
  * @param index The 0-indexed position of the video in the playlist to load and play.
  */
-- (void)playVideoAt:(NSInteger)index;
+- (void)playVideoAt:(NSInteger)index callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 #pragma mark - Setting the playback rate
 
