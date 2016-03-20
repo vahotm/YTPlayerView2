@@ -129,10 +129,33 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
 
 @property (nonatomic, strong) NSURL *originURL;
 @property (nonatomic, strong, nullable) WKNavigation *htmlLoadingNavigation;
+@property (nonatomic) YTPlayerState playerState;
 
 @end
 
 @implementation YTPlayerView
+
+#pragma mark - Init/dealloc
+
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInitialize];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self commonInitialize];
+    }
+    return self;
+}
+
+- (void)commonInitialize {
+    self.playerState = YTPlayerStateUnknown;
+}
 
 #pragma mark - Initial configuration properties
 
@@ -142,7 +165,7 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
     }
     _beforeLoadingView = beforeLoadingView;
     // Display the given view immediately if the internal state is `Not Loading Yet`.
-    if (self.webView == nil) {
+    if (self.webView == nil && self.htmlLoadingNavigation == nil) {
         [self showBeforeLoadingView];
     }
 }
@@ -152,7 +175,10 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
         [_initialLoadingView removeFromSuperview];
     }
     _initialLoadingView = initialLoadingView;
-    // TODO: Display the given view immediately if the internal state is `Loading the YouTube iframe Player`.
+    // Display the given view immediately if the internal state is `Loading the YouTube iframe Player`.
+    if (self.webView == nil && self.htmlLoadingNavigation != nil) {
+        [self showInitialLoadingView];
+    }
 }
 
 #pragma mark - Initial loading methods
@@ -497,24 +523,25 @@ NSString *NSStringFromYTPlaybackQuality(YTPlaybackQuality quality) {
             [self.delegate playerViewDidBecomeReady:self];
         }
     } else if ([action isEqualToString:YTPlayerCallbackOnStateChange]) {
-        // TODO: cache state internally to use it immediately, because we have to wait when we query using JS now.
+        // Caches state internally to use it immediately, because we have to wait when we query using JS now.
+        YTPlayerState state = YTPlayerStateUnknown;
+        
+        if ([data isEqualToString:YTPlayerStateEndedCode]) {
+            state = YTPlayerStateEnded;
+        } else if ([data isEqual:YTPlayerStatePlayingCode]) {
+            state = YTPlayerStatePlaying;
+        } else if ([data isEqual:YTPlayerStatePausedCode]) {
+            state = YTPlayerStatePaused;
+        } else if ([data isEqual:YTPlayerStateBufferingCode]) {
+            state = YTPlayerStateBuffering;
+        } else if ([data isEqual:YTPlayerStateCuedCode]) {
+            state = YTPlayerStateQueued;
+        } else if ([data isEqual:YTPlayerStateUnstartedCode]) {
+            state = YTPlayerStateUnstarted;
+        }
+        
+        self.playerState = state;
         if ([self.delegate respondsToSelector:@selector(playerView:didChangeToState:)]) {
-            YTPlayerState state = YTPlayerStateUnknown;
-            
-            if ([data isEqualToString:YTPlayerStateEndedCode]) {
-                state = YTPlayerStateEnded;
-            } else if ([data isEqual:YTPlayerStatePlayingCode]) {
-                state = YTPlayerStatePlaying;
-            } else if ([data isEqual:YTPlayerStatePausedCode]) {
-                state = YTPlayerStatePaused;
-            } else if ([data isEqual:YTPlayerStateBufferingCode]) {
-                state = YTPlayerStateBuffering;
-            } else if ([data isEqual:YTPlayerStateCuedCode]) {
-                state = YTPlayerStateQueued;
-            } else if ([data isEqual:YTPlayerStateUnstartedCode]) {
-                state = YTPlayerStateUnstarted;
-            }
-            
             [self.delegate playerView:self didChangeToState:state];
         }
     } else if ([action isEqualToString:YTPlayerCallbackOnPlaybackQualityChange]) {

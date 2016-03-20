@@ -62,6 +62,9 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
     YTPlayerErrorFailedToLoadPlayer,    /// Failed to load YouTube iframe player through API (might have no internet connection for now, etc...)
 };
 
+typedef void (^YTPlayerViewResultVoid)(NSError * _Nullable error);
+typedef void (^YTPlayerViewResultFloat)(float value, NSError * _Nullable error);
+typedef void (^YTPlayerViewResultNumberArray)(NSArray<NSNumber *> *values, NSError * _Nullable error);
 
 #pragma mark - YTPlayerViewDelegate
 
