@@ -343,7 +343,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
 - (void)cueVideoById:(NSString *)videoId
         startSeconds:(float)startSeconds
           endSeconds:(float)endSeconds
-    suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+    suggestedQuality:(YTPlaybackQuality)suggestedQuality
+            callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Loads a given video by its video ID for playback starting at the given time and with the
@@ -357,7 +358,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  */
 - (void)loadVideoById:(NSString *)videoId
          startSeconds:(float)startSeconds
-     suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Loads a given video by its video ID for playback starting and ending at the given times
@@ -373,7 +375,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
 - (void)loadVideoById:(NSString *)videoId
          startSeconds:(float)startSeconds
            endSeconds:(float)endSeconds
-     suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Cues a given video by its URL on YouTube.com for playback starting at the given time
@@ -387,7 +390,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  */
 - (void)cueVideoByURL:(NSURL *)videoURL
          startSeconds:(float)startSeconds
-     suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Cues a given video by its URL on YouTube.com for playback starting at the given time
@@ -403,7 +407,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
 - (void)cueVideoByURL:(NSURL *)videoURL
          startSeconds:(float)startSeconds
            endSeconds:(float)endSeconds
-     suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Loads a given video by its video ID for playback starting at the given time
@@ -417,7 +422,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
  */
 - (void)loadVideoByURL:(NSURL *)videoURL
           startSeconds:(float)startSeconds
-      suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+      suggestedQuality:(YTPlaybackQuality)suggestedQuality
+              callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Loads a given video by its video ID for playback starting and ending at the given times
@@ -433,7 +439,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> *values, NSE
 - (void)loadVideoByURL:(NSURL *)videoURL
           startSeconds:(float)startSeconds
             endSeconds:(float)endSeconds
-      suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+      suggestedQuality:(YTPlaybackQuality)suggestedQuality
+              callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 #pragma mark - Playing a video in a playlist
 

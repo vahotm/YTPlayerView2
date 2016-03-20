@@ -337,6 +337,128 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     }];
 }
 
+#pragma mark - Queuing videos
+
+- (void)cueVideoById:(NSString *)videoId
+        startSeconds:(float)startSeconds
+    suggestedQuality:(YTPlaybackQuality)suggestedQuality
+            callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.cueVideoById('%@', %@, '%@');", videoId, startSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)cueVideoById:(NSString *)videoId
+        startSeconds:(float)startSeconds
+          endSeconds:(float)endSeconds
+    suggestedQuality:(YTPlaybackQuality)suggestedQuality
+            callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSNumber *endSecondsValue = [NSNumber numberWithFloat:endSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.cueVideoById({'videoId': '%@', 'startSeconds': %@, 'endSeconds': %@, 'suggestedQuality': '%@'});", videoId, startSecondsValue, endSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)loadVideoById:(NSString *)videoId
+         startSeconds:(float)startSeconds
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.loadVideoById('%@', %@, '%@');", videoId, startSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)loadVideoById:(NSString *)videoId
+         startSeconds:(float)startSeconds
+           endSeconds:(float)endSeconds
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSNumber *endSecondsValue = [NSNumber numberWithFloat:endSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.loadVideoById({'videoId': '%@', 'startSeconds': %@, 'endSeconds': %@, 'suggestedQuality': '%@'});",videoId, startSecondsValue, endSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)cueVideoByURL:(NSString *)videoURL
+         startSeconds:(float)startSeconds
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.cueVideoByUrl('%@', %@, '%@');", videoURL, startSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)cueVideoByURL:(NSString *)videoURL
+         startSeconds:(float)startSeconds
+           endSeconds:(float)endSeconds
+     suggestedQuality:(YTPlaybackQuality)suggestedQuality
+             callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSNumber *endSecondsValue = [NSNumber numberWithFloat:endSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.cueVideoByUrl('%@', %@, %@, '%@');", videoURL, startSecondsValue, endSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)loadVideoByURL:(NSString *)videoURL
+          startSeconds:(float)startSeconds
+      suggestedQuality:(YTPlaybackQuality)suggestedQuality
+              callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.loadVideoByUrl('%@', %@, '%@');", videoURL, startSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)loadVideoByURL:(NSString *)videoURL
+          startSeconds:(float)startSeconds
+            endSeconds:(float)endSeconds
+      suggestedQuality:(YTPlaybackQuality)suggestedQuality
+              callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSNumber *startSecondsValue = [NSNumber numberWithFloat:startSeconds];
+    NSNumber *endSecondsValue = [NSNumber numberWithFloat:endSeconds];
+    NSString *qualityValue = NSStringFromYTPlaybackQuality(suggestedQuality);
+    NSString *command = [NSString stringWithFormat:@"player.loadVideoByUrl('%@', %@, %@, '%@');", videoURL, startSecondsValue, endSecondsValue, qualityValue];
+    [self evaluateJavaScript:command completionHandler:^(id  _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
 #pragma mark - Exposed for Testing
 
 - (void)removeWebView {
