@@ -327,7 +327,8 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  */
 - (void)cueVideoById:(NSString *)videoId
         startSeconds:(float)startSeconds
-    suggestedQuality:(YTPlaybackQuality)suggestedQuality;
+    suggestedQuality:(YTPlaybackQuality)suggestedQuality
+            callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Cues a given video by its video ID for playback starting and ending at the given times
@@ -517,7 +518,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @param loop A boolean representing whether the player should loop.
  */
-- (void)setLoop:(BOOL)loop;
+- (void)setLoop:(BOOL)loop callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 /**
  * Sets whether the player should shuffle through the playlist. This method
@@ -527,7 +528,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  * @param shuffle A boolean representing whether the player should
  *                shuffle through the playlist.
  */
-- (void)setShuffle:(BOOL)shuffle;
+- (void)setShuffle:(BOOL)shuffle callback:(nullable YTPlayerViewJSResultVoid)callback;
 
 #pragma mark - Playback status
 // These methods correspond to the JavaScript methods defined here:
@@ -542,7 +543,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  * @return A float value between 0 and 1 representing the percentage of the video
  *         already loaded.
  */
-- (float)videoLoadedFraction;
+- (void)videoLoadedFraction:(nullable YTPlayerViewJSResultFloat)callback;
 
 /**
  * Returns the state of the player. This method corresponds to the
@@ -560,7 +561,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return Time in seconds since the video started playing.
  */
-- (float)currentTime;
+- (void)currentTime:(nullable YTPlayerViewJSResultFloat)callback;
 
 #pragma mark - Playback quality
 

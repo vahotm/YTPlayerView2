@@ -522,6 +522,44 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     }];
 }
 
+#pragma mark - Setting playback behavior for playlists
+
+- (void)setLoop:(BOOL)loop callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSString *command = [NSString stringWithFormat:@"player.setLoop(%@);", NSStringFromYTPlayerJSBoolean(loop)];
+    [self evaluateJavaScript:command completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+- (void)setShuffle:(BOOL)shuffle callback:(nullable YTPlayerViewJSResultVoid)callback {
+    NSString *command = [NSString stringWithFormat:@"player.setShuffle(%@);", NSStringFromYTPlayerJSBoolean(shuffle)];
+    [self evaluateJavaScript:command completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(error);
+        }
+    }];
+}
+
+#pragma mark - Playback status
+
+- (void)videoLoadedFraction:(nullable YTPlayerViewJSResultFloat)callback {
+    [self evaluateJavaScript:@"player.getVideoLoadedFraction();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback([result floatValue], error);
+        }
+    }];
+}
+
+- (void)currentTime:(nullable YTPlayerViewJSResultFloat)callback {
+    [self evaluateJavaScript:@"player.getCurrentTime();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback([result floatValue], error);
+        }
+    }];
+}
+
 #pragma mark - Exposed for Testing
 
 - (void)removeWebView {
@@ -805,6 +843,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
             [self delegateErrorWithCode:errorCode description:nil underlyingError:nil];
         }
     } else if ([action isEqualToString:YTPlayerCallbackOnPlayTime]) {
+        // XXX: Might be better to cache the currentTime value internally like playerState
         if ([self.delegate respondsToSelector:@selector(playerView:didPlayTime:)]) {
             float time = [data floatValue];
             [self.delegate playerView:self didPlayTime:time];
