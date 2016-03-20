@@ -595,6 +595,60 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     }];
 }
 
+#pragma mark - Retrieving video information
+
+
+- (void)duration:(nullable YTPlayerViewJSResultFloat)callback {
+    [self evaluateJavaScript:@"player.getDuration();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback([result floatValue], error);
+        }
+    }];
+}
+
+- (void)videoURL:(nullable YTPlayerViewJSResultURL)callback {
+    [self evaluateJavaScript:@"player.getVideoUrl();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback([NSURL URLWithString:result], error);
+        }
+    }];
+}
+
+- (void)videoEmbedCode:(nullable YTPlayerViewJSResultString)callback {
+    [self evaluateJavaScript:@"player.getVideoEmbedCode();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback(result, error);
+        }
+    }];
+}
+
+#pragma mark - Retrieving playlist information
+
+- (void)playlist:(nullable YTPlayerViewJSResultStringArray)callback {
+    [self evaluateJavaScript:@"player.getPlaylist();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            NSData *jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *jsonError;
+            NSArray *playbackRates = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                     options:0
+                                                                       error:&jsonError];
+            if (jsonError) {
+                callback(nil, [NSError errorWithDomain:YTPlayerErrorDomain code:YTPlayerErrorJSError userInfo:@{NSUnderlyingErrorKey: jsonError}]);
+            } else {
+                callback(playbackRates, error);
+            }
+        }
+    }];
+}
+
+- (void)playlistIndex:(nullable YTPlayerViewJSResultInteger)callback {
+    [self evaluateJavaScript:@"player.getPlaylistIndex();" completionHandler:^(id _Nullable result, NSError * _Nullable error) {
+        if (callback) {
+            callback([result integerValue], error);
+        }
+    }];
+}
+
 #pragma mark - Exposed for Testing
 
 - (void)removeWebView {

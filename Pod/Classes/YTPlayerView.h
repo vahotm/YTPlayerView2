@@ -66,7 +66,10 @@ typedef NS_ENUM(NSInteger, YTPlayerError) {
 typedef void (^YTPlayerViewJSResultVoid)(NSError * _Nullable error);
 typedef void (^YTPlayerViewJSResultInteger)(NSInteger value, NSError * _Nullable error);
 typedef void (^YTPlayerViewJSResultFloat)(float value, NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultString)(NSString * _Nullable value, NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultURL)(NSURL * _Nullable value, NSError * _Nullable error);
 typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable values, NSError * _Nullable error);
+typedef void (^YTPlayerViewJSResultStringArray)(NSArray<NSString *> * _Nullable values, NSError * _Nullable error);
 
 #pragma mark - YTPlayerViewDelegate
 
@@ -611,7 +614,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return Length of the video in seconds.
  */
-- (NSTimeInterval)duration;
+- (void)duration:(nullable YTPlayerViewJSResultFloat)callback;
 
 /**
  * Returns the YouTube.com URL for the video. This method corresponds
@@ -620,7 +623,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return The YouTube.com URL for the video. Returns nil if no video is loaded yet.
  */
-- (nullable NSURL *)videoURL;
+- (void)videoURL:(nullable YTPlayerViewJSResultURL)callback;
 
 /**
  * Returns the embed code for the current video. This method corresponds
@@ -629,7 +632,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return The embed code for the current video. Returns nil if no video is loaded yet.
  */
-- (nullable NSString *)videoEmbedCode;
+- (void)videoEmbedCode:(nullable YTPlayerViewJSResultString)callback;
 
 #pragma mark - Retrieving playlist information
 
@@ -644,7 +647,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return An NSArray containing all the video IDs in the current playlist. |nil| on error.
  */
-- (nullable NSArray *)playlist;
+- (void)playlist:(nullable YTPlayerViewJSResultStringArray)callback;
 
 /**
  * Returns the 0-based index of the currently playing item in the playlist.
@@ -653,7 +656,7 @@ typedef void (^YTPlayerViewJSResultNumberArray)(NSArray<NSNumber *> * _Nullable 
  *
  * @return The 0-based index of the currently playing item in the playlist.
  */
-- (NSInteger)playlistIndex;
+- (void)playlistIndex:(nullable YTPlayerViewJSResultInteger)callback;
 
 #pragma mark - Exposed for Testing
 
