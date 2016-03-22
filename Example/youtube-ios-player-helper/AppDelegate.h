@@ -1,5 +1,5 @@
 //
-//  YTAppDelegate.h
+//  AppDelegate.h
 //  youtube-ios-player-helper
 //
 //  Created by akisute on 03/17/2016.
@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface YTAppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
