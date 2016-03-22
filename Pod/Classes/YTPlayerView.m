@@ -257,13 +257,13 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     
     NSString *htmlPath = [[NSBundle bundleForClass:[self class]] pathForResource:@"YTPlayerView-iframe-player"
                                                                           ofType:@"html"
-                                                                     inDirectory:@"youtube-ios-player-helper"];
+                                                                     inDirectory:@"Assets"];
     
     // In case of using Swift and embedded frameworks, resources included not in main bundle, but in framework bundle.
     if (htmlPath == nil) {
         htmlPath = [[[self class] frameworkBundle] pathForResource:@"YTPlayerView-iframe-player"
                                                             ofType:@"html"
-                                                       inDirectory:@"youtube-ios-player-helper"];
+                                                       inDirectory:@"Assets"];
     }
     
     NSError *htmlError = nil;
