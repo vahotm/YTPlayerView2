@@ -248,6 +248,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     // Remove the existing webView to reset any state, then create a new one.
     [self removeWebView];
     self.webView = [self instantiateWebView];
+    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
     self.webView.navigationDelegate = self;
     self.webView.UIDelegate = self;
     [self addSubview:self.webView];
