@@ -6,18 +6,7 @@
 //  Copyright © 2016年 akisute. All rights reserved.
 //
 
-// TODO: change the module name completely... I can't bare with this
-// To confirm clang module system, we must not use - (dash) in the module name, which is replaced to _ (underscore).
-// https://github.com/CocoaPods/Core/issues/205
-
-// Doesn't work, needs umbrella header youtube-ios-player-helper.h, kinda ugly
-//#import <youtube-ios-player-helper/youtube-ios-player-helper.h>
-
-// Doesn't work because - is replaced to _ when clang module is enabled...
-//#import <youtube-ios-player-helper/YTPlayerView.h>
-
-// This one works but so ugly
-#import <youtube_ios_player_helper/YTPlayerView.h>
+#import <YTPlayerView/YTPlayerView.h>
 
 #import "Sample_Basic_Code_ViewController.h"
 

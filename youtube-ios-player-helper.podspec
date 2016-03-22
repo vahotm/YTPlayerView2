@@ -53,5 +53,7 @@ Pod::Spec.new do |s|
   #  'youtube-ios-player-helper' => ['Pod/Assets/*']
   #}
   s.public_header_files = 'Pod/Classes/**/*.h'
+  s.header_dir = 'YTPlayerView'
+  s.module_name = 'YTPlayerView'
   s.frameworks = 'UIKit', 'WebKit'
 end

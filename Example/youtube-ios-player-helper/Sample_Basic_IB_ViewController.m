@@ -6,7 +6,7 @@
 //  Copyright © 2016年 akisute. All rights reserved.
 //
 
-#import <youtube_ios_player_helper/YTPlayerView.h>
+#import <YTPlayerView/YTPlayerView.h>
 
 #import "Sample_Basic_IB_ViewController.h"
 
