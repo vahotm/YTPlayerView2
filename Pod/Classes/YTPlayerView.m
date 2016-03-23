@@ -133,7 +133,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
 #pragma mark -
 
 
-@interface YTPlayerView() <WKNavigationDelegate, WKUIDelegate>
+@interface YTPlayerView() <WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler>
 
 @property (nonatomic, strong, nullable) WKWebView *webView;
 
@@ -775,6 +775,19 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     completionHandler(defaultText);
 }
 
+#pragma mark - WKScriptMessageHandler
+
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    if ([message.name isEqualToString:@"log"]) {
+        // Debugging log JS interface
+        // The following JS code in HTML causes this callback, logging the given object with NSLog:
+        // `window.webkit.messageHandlers.log.postMessage("Hello, YTPlayerView");`
+        // This could be handly to track down things in the HTML.
+        // We might want to remove this logging feature in shipping code, but as long as you don't explicitly call `window.webkit.messageHandlers.log` this is harmless at all.
+        NSLog(@"[YTPlayerView script log] %@", message.body);
+    }
+}
+
 #pragma mark - Private methods
 
 + (NSBundle *)frameworkBundle {
@@ -795,7 +808,12 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     // XXX: processPool, should we share Web Content processes between all YTPlayerViews or not?
     // XXX: websiteDataStore, should we add any ways to clear up local data store (such as cookies or local storages YouTube might use)?
     
-    // media configurations.
+    // User Script configurations.
+    WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+    [userContentController addScriptMessageHandler:self name:@"log"];
+    configuration.userContentController = userContentController;
+    
+    // Media configurations.
     configuration.allowsInlineMediaPlayback = YES;
     if ([configuration respondsToSelector:@selector(requiresUserActionForMediaPlayback)]) {
         configuration.requiresUserActionForMediaPlayback = NO;
