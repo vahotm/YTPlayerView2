@@ -145,20 +145,20 @@ typedef void (^YTPlayerViewJSResultStringArray)(NSArray<NSString *> * _Nullable 
 #pragma mark - Initial configuration properties
 
 /** A delegate to be notified on playback events. */
-@property (nonatomic, weak, nullable) id<YTPlayerViewDelegate> delegate;
+@property (nonatomic, weak, nullable) IBOutlet id<YTPlayerViewDelegate> delegate;
 
 /**
  * A Boolean value indicating whether you want to allow to play videos in AirPlay.
  * Default value is NO.
  */
-@property (nonatomic) BOOL allowsAirPlayForMediaPlayback;
+@property (nonatomic) IBInspectable BOOL allowsAirPlayForMediaPlayback;
 
 /**
  * A Boolean value indicating whether you want to allow to play videos in picture-in-picture mode.
  * Only works when picture-in-picture mode is supported by the running OS and the device.
  * Default value is NO.
  */
-@property (nonatomic) BOOL allowsPictureInPictureMediaPlayback;
+@property (nonatomic) IBInspectable BOOL allowsPictureInPictureMediaPlayback;
 
 /**
  A view that is displayed while the YouTube player is not loaded or not being loaded yet.
