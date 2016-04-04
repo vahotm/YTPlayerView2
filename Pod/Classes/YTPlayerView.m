@@ -672,6 +672,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
         decisionHandler(WKNavigationActionPolicyAllow);
     } else if ([url.scheme isEqualToString:@"ytplayer"]) {
         // Callbacks from YouTube iframe API. Do not navigate, just handle it internally.
+        // The current implementation uses JS callback interface provided by WKWebView, so this should no longer be called.
         [self handleYouTubeCallbackURL:navigationAction.request.URL];
         decisionHandler(WKNavigationActionPolicyCancel);
     } else if ([url.scheme isEqualToString:@"http"] || [url.scheme isEqualToString:@"https"]) {
@@ -785,6 +786,12 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
         // This could be handly to track down things in the HTML.
         // We might want to remove this logging feature in shipping code, but as long as you don't explicitly call `window.webkit.messageHandlers.log` this is harmless at all.
         NSLog(@"[YTPlayerView script log] %@", message.body);
+    } else if ([message.name isEqualToString:@"callback"]) {
+        // Callback JS interface
+        // This is much more reliable to receive events from JS than using `window.location.href` hack used in UIWebView.
+        // We can directly pass objects, but for now we just keep using the old implementation, which is URL string.
+        NSString *urlString = message.body;
+        [self handleYouTubeCallbackURL:[NSURL URLWithString:urlString]];
     }
 }
 
@@ -811,6 +818,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     // User Script configurations.
     WKUserContentController *userContentController = [[WKUserContentController alloc] init];
     [userContentController addScriptMessageHandler:self name:@"log"];
+    [userContentController addScriptMessageHandler:self name:@"callback"];
     configuration.userContentController = userContentController;
     
     // Media configurations.
