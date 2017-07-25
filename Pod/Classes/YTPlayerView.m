@@ -165,6 +165,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
 
 - (void)commonInitialize {
     self.playerState = YTPlayerStateUnknown;
+    self.allowsInlineMediaPlayback = YES;
 }
 
 #pragma mark - Initial configuration properties
@@ -822,7 +823,7 @@ NSString *NSStringFromYTPlayerJSBoolean(BOOL boolValue) {
     configuration.userContentController = userContentController;
     
     // Media configurations.
-    configuration.allowsInlineMediaPlayback = YES;
+    configuration.allowsInlineMediaPlayback = self.allowsInlineMediaPlayback;
     if ([configuration respondsToSelector:@selector(requiresUserActionForMediaPlayback)]) {
         configuration.requiresUserActionForMediaPlayback = NO;
     } else {

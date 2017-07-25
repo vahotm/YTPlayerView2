@@ -161,6 +161,12 @@ typedef void (^YTPlayerViewJSResultStringArray)(NSArray<NSString *> * _Nullable 
 @property (nonatomic) IBInspectable BOOL allowsPictureInPictureMediaPlayback;
 
 /**
+ * A Boolean value indicating whether you want to allow to play videos inline in iframe.
+ * Default value is YES.
+ */
+@property (nonatomic) IBInspectable BOOL allowsInlineMediaPlayback;
+
+/**
  A view that is displayed while the YouTube player is not loaded or not being loaded yet.
  
  YTPlayerView can't show users anything unless the YouTube player is loaded to the web view through YouTube iframe API.
